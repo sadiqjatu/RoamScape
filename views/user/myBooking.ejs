@@ -1,0 +1,29 @@
+<% layout("./layouts/boilerplate") %>
+<body>
+    <div class="booking-list-container">
+        <h1 class="booking-heading">Your Bookings</h1>
+    
+        <% if (bookings.length === 0) { %>
+          <p class="no-booking-text">You haven't made any bookings yet.</p>
+        <% } else { %>
+          <div class="booking-grid">
+            <% bookings.forEach(booking => { %>
+              <div class="booking-card">
+                <img src="<%= booking.listing.image.url %>" alt="Listing Image" class="booking-img" />
+                <div class="booking-details">
+                  <h2><%= booking.listing.title %></h2>
+                  <p><strong>Location:</strong> <%= booking.listing.location %></p>
+                  <p><strong>Check-in:</strong> <%= booking.checkIn.toDateString() %></p>
+                  <p><strong>Check-out:</strong> <%= booking.checkOut.toDateString() %></p>
+                  <p><strong>Guests:</strong> <%= booking.guests %></p>
+                  <p><strong>Total Price:</strong> &#8377; <%= booking.totalPrice.toLocaleString("en-IN") %></p>
+                </div>
+                <form method="post" action="/bookings/<%= booking._id%>/cancel?_method=PATCH">
+                    <button class="delete-btn ms-2">Cancel</button>
+                </form>
+              </div>
+            <% }); %>
+          </div>
+        <% } %>
+      </div>
+</body>

@@ -1,0 +1,125 @@
+<%- layout('./layouts/boilerplate') %>
+<body>
+    <div class="new-content">
+        <div class="card show-card">
+            <h3><%= listing.title %></h3>
+            <img src="<%= listing.image.url %>" class="edit-img" alt="listing-image">
+            <div class="card-body">
+                    <p class="card-text">Owned by <b><i>"<%= listing.owner.username %>"</i></b></p>
+                    <p class="card-text"><%= listing.description %></p>
+                    <p class="card-text"><span class="show-price">&#8377; <%= listing.price.toLocaleString("en-IN") %>/ night </span></p>
+                    <p class="card-text"><%= listing.location %></p>
+                    <p class="card-text"><%= listing.country %></p>
+                </p>
+            </div>
+            <% if (currUser && currUser._id.equals(listing.owner._id)) { %>
+                <div class="btns">
+                    <a href="/listings/<%= listing._id %>/edit" class="btn edit-btn">Edit</a>
+                    <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE">
+                        <button class="delete-btn">Delete</button>
+                    </form>
+                </div>
+            <% } %>
+        </div>
+
+        <!-- booking form -->
+        <div class="booking-container">
+            <div class="booking-form-wrapper">
+              <h2 class="booking-heading">Book Your Stay</h2>
+              <% if (currUser) { %>
+                <form action="/bookings" method="POST" class="booking-form needs-validation" novalidate>
+                    <input class="form-control" type="hidden" name="listing" value="<%= listing._id %>">
+                    <input class="form-control" type="hidden" name="user" value="<%= currUser?._id %>">
+              
+                    <label class="form-label" for="checkIn">Check-in:</label>
+                    <input class="form-control" type="date" name="checkIn" id="checkIn" required>
+              
+                    <label class="form-label" for="checkOut">Check-out:</label>
+                    <input class="form-control" type="date" name="checkOut" id="checkOut" required>
+              
+                    <label class="form-label" for="guests">Guests:</label>
+                    <input class="form-control" type="number" name="guests" id="guests" min="1" max="<%= listing.maxGuests || 10 %>" required>
+              
+                    <button type="submit" class="booking-btn">Book Now</button>
+                  </form>
+              <% } else { %>
+                <p style="text-align: center;">Please log in to book this listing.</p>
+            <% } %>
+            </div>
+          </div>
+          
+
+        <!-- map-section -->
+        <div class="map-section">
+            <h3>Where you'll be</h3>
+            <p><%= listing.location %></p>
+            <div id="map" style="height: 400px; border-radius: 12px; margin: 1rem 0;"></div>
+        </div>
+
+        <div class="review-section">
+            <div class="reviews-info">
+                <h4>All reviews</h4>
+                <span class="counter"><%= listing.reviews.length %> reviews found</span>
+                <% for(let review of listing.reviews) { %>
+                    <div class="card review-card">
+                        <div class="card-body">
+                            <h5 class="card-title">@<%= review.author.username %></h5>
+                            <p class="starability-result card-text" data-rating="<%= review.rating %>"></p>
+                            <p class="card-text"><i>"<%= review.comment %>"</i></p>
+                        </div>
+                        <form method="post" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE">
+                            <button class="btn rev-del-btn">Delete</button>
+                        </form>
+                    </div>
+                <% } %>
+            </div>
+
+            <% if (currUser) { %>
+                <div class="review-form">
+                    <form method="post" action="/listings/<%= listing._id %>/reviews" novalidate class="needs-validation">
+                        <h4>Leave a Review</h4>
+                        <label for="rating" class="form-label">Rating</label>
+                        <fieldset class="starability-slot">
+                            <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
+                            <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+                            <label for="first-rate1" title="Terrible">1 star</label>
+                            <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+                            <label for="first-rate2" title="Not good">2 stars</label>
+                            <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+                            <label for="first-rate3" title="Average">3 stars</label>
+                            <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+                            <label for="first-rate4" title="Very good">4 stars</label>
+                            <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+                            <label for="first-rate5" title="Amazing">5 stars</label>
+                          </fieldset>
+                        <label for="comment" class="form-label">Comments</label>
+                        <textarea name="review[comment]" id="comment" cols="30" rows="5" class="form-control" required></textarea>
+                        <div class="invalid-feedback">Please add comment</div>
+                        <button class="btn sub-btn">Submit</button>
+                    </form>
+                </div>
+            <% } %>
+            
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+    </script>
+
+    <!-- Your map initialization script -->
+    <script>
+        const lon = <%= listing.geometry.coordinates[1] %>;
+    const lat = <%= listing.geometry.coordinates[0] %>;
+      const map = L.map('map').setView([lat, lon], 13); // Example coords
+    
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(map);
+    
+      L.marker([lat, lon]).addTo(map)
+        .bindPopup(listing.title)
+        .openPopup();
+    </script>
+</body>

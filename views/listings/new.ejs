@@ -1,0 +1,41 @@
+<% layout("./layouts/boilerplate") %>
+<body>
+    <div class="new-content">
+    <form method="POST" action="/listings" novalidate  class="new-form needs-validation">
+        <h3>Create your listing here</h3>
+        <div class="mb-3">
+            <label for="listingTitle" class="form-label">Title</label>
+            <input name="listing[title]" placeholder="Add a catchy title" type="text" id="listingTitle" class="form-control" required>
+            <div class="valid-feedback">Title looks good</div>
+            <div class="invalid-feedback">Title should be valid</div>
+        </div>
+        <div class="mb-3">
+            <label for="listingDescription" class="form-label">Description</label>
+            <textarea name="listing[description]" id="listingDescription" class="form-control" placeholder="Enter description..." cols="30" rows="2.5" required></textarea>
+            <div class="invalid-feedback">Description should be valid</div>
+        </div>
+        <div class="mb-3">
+            <label for="listingUrl" class="form-label">Image Link</label>
+            <input name="listing[image][url]" placeholder="Enter image URL/link" type="url" id="listingUrl" class="form-control">
+        </div>
+        <div class="mb-3 price-country">
+            <div class="price">
+                <label for="listingPrice" class="form-label">Price</label>
+                <input name="listing[price]" placeholder="Enter price" id="listingPrice" class="form-control" required>
+                <div class="invalid-feedback">Price should be valid</div>
+            </div>
+            <div class="country">
+                <label for="listingCountry" class="form-label">Country</label>
+                <input name="listing[country]" placeholder="Enter country (eg: India)" type="text" id="listingCountry" class="form-control" required>
+                <div class="invalid-feedback">Country should be valid</div>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="listingLocation" class="form-label">Location</label>
+            <input name="listing[location]" placeholder="Enter location" type="text" id="listingLocation" class="form-control" required>
+            <div class="invalid-feedback">Location should be valid</div>
+        </div>
+        <button class="mb-3">Add</button>
+    </form>
+    </div>
+</body>
