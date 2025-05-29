@@ -1,3 +1,5 @@
+Edited by Ashraf
+
 # RoamScape
 
 RoamScape is a server-side rendered web application inspired by Airbnb. Built using the MVC architecture, it enables users to browse, book, and list short-term rentals such as hotel rooms, apartments, and vacation homes.
