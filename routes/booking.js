@@ -7,10 +7,10 @@ const {
     createBooking,
     getUserBookings,
     cancelBooking,
-  } = require("../controllers/bookingController.js");
+  } = require("../controllers/booking.js");
 
-router.post("/", createBooking); // Book a listing
-router.get("/user/:userId", isLoggedIn, getUserBookings); // Get bookings by user
-router.patch("/:id/cancel", cancelBooking); // Cancel booking
+router.post("/", wrapAsync(createBooking)); // Book a listing
+router.get("/user/:userId", isLoggedIn, wrapAsync(getUserBookings)); // Get bookings by user
+router.patch("/:id/cancel", wrapAsync(cancelBooking)); // Cancel booking
 
 module.exports = router;

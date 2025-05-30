@@ -14,7 +14,6 @@ const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
 const Listing = require("./models/listing.js");
 
-
 const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
@@ -40,11 +39,6 @@ main().then( ()=>{
 async function main(){
     await mongoose.connect("mongodb://127.0.0.1:27017/roamscape")
 }
-
-// //Root Route
-// app.get("/", (req, res) => {
-//     res.send("Hi, i am root");
-// });
 
 const sessionOptions = {
     secret: "mysupersecretcode",

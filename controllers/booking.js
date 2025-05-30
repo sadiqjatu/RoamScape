@@ -12,7 +12,7 @@ module.exports.createBooking = async (req, res) => {
       // Check for conflicting bookings
     const existingBooking = await Booking.findOne({
       listing,
-      status: { $ne: "canceled" }, // ignore canceled bookings
+      status: { $ne: "cancelled" }, // ignore canceled bookings
       $or: [
         {
           checkIn: { $lt: new Date(checkOut) },
