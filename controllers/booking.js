@@ -1,5 +1,5 @@
-const Booking = require("../models/Booking.js");
-const Listing = require("../models/Listing.js");
+const Booking = require("../models/booking.js");
+const Listing = require("../models/listing.js");
 
 module.exports.createBooking = async (req, res) => {
     try {
