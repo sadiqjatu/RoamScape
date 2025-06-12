@@ -13,12 +13,15 @@ module.exports.renderNewForm = (req, res) => {
 
 module.exports.createListing = async (req, res, next) => {
     let newListing = new Listing(req.body.listing);
+    console.log(newListing);
     // 1. Make request to Nominatim API
     const geoRes = await axios.get("https://nominatim.openstreetmap.org/search", {
         params: {
             q: newListing.location,
             format: "json",
-            limit: 1
+            limit: 1,
+            email: "sadiqjatu@gmail.com",
+            addressdetails: 1
         },
         headers: {
             'User-Agent': 'RoamScape/1.0 sadiqjatu.89@gmail.com' // required by Nominatim usage policy
@@ -41,6 +44,10 @@ module.exports.createListing = async (req, res, next) => {
     newListing.geometry.type = "Point";
     newListing.geometry.coordinates = [lat, lon];
 
+    //save link of an image which is stored in cloudinary cloud
+    newListing.image.filename = req.file.filename;
+    newListing.image.url = req.file.path;
+
     await newListing.save();
     req.flash("success", "Listing created successfully!");
     res.redirect("/listings");
@@ -61,9 +68,12 @@ module.exports.renderEditForm = async (req, res, next) => {
     let listing = await Listing.findById(id);
     if(!listing){
         req.flash("error", "Requested listing does not exist!");
-        res.redirect("/listings");
+        return res.redirect("/listings");
     }
-    res.render("listings/edit.ejs", { listing: listing });
+    let originalImageUrl = listing.image.url;
+    originalImageUrl = originalImageUrl.replace("/upload", "/upload/e_blur:300"); //replacing link with image transformation
+
+    res.render("listings/edit.ejs", { listing: listing, originalImageUrl });
 }
 
 module.exports.updateListing = async (req, res, next) => {
@@ -75,7 +85,16 @@ module.exports.updateListing = async (req, res, next) => {
     if(!req.body.listing){
         next(new ExpressError(400, "Please enter valid data in the form"));
     }
-    await Listing.findByIdAndUpdate(id, {...req.body.listing}, {runValidators: true});
+    let updatedListing = await Listing.findByIdAndUpdate(id, {...req.body.listing}, {runValidators: true});
+    console.log(req.body.listing)
+    if(typeof req.file !== "undefined" ){
+        let url = req.file.path;
+        let filename = req.file.filename;
+        updatedListing.image = {url, filename};
+
+        await updatedListing.save();
+    }
+
     req.flash("success", "Listing updated!")
     res.redirect(`/listings/${id}`);
 }

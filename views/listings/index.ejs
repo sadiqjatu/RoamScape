@@ -1,7 +1,84 @@
 <% layout("./layouts/boilerplate") %>
 <body>
+    <div class="filters">
+      <button id="left-btn" class="arrow">&larr;</button>
+      <div class="icon-slider" id="icon-slider">
+        <a href="/filter?category=trending">
+          <div class="filter">
+            <div><i class="bi bi-fire"></i></div>
+            <p>Trending</p>
+          </div>
+        </a>
+        <a href="/filter?category=rooms">
+          <div class="filter">
+            <div><i class="fa-solid fa-bed"></i></div>
+            <p>Rooms</p>
+          </div>
+        </a>
+        <a href="/filter?category=iconic+cities">
+          <div class="filter">
+            <div><i class="fa-solid fa-tree-city"></i></div>
+            <p>Iconic cities</p>
+          </div>
+        </a>
+        <a href="/filter?category=mountains">
+          <div class="filter">
+            <div><i class="fas fa-mountain"></i></div>
+            <p>Mountains</p>
+          </div>
+        </a>
+        <a href="/filter?category=castles">
+          <div class="filter">
+            <div><i class="fa-brands fa-fort-awesome"></i></div>
+            <p>Castles</p>
+          </div>
+        </a>
+        <a href="/filter?category=amazing+pools">
+          <div class="filter">
+            <div><i class="fa-solid fa-person-swimming"></i></div>
+            <p>Amazing pools</p>
+          </div>
+        </a>
+        <a href="/filter?category=camping">
+          <div class="filter">
+            <div><i class="fa-solid fa-campground"></i></div>
+            <p>Camping</p>
+          </div>
+        </a>
+        <a href="/filter?category=farms">
+          <div class="filter">
+            <div><i class="fa-solid fa-cow"></i></div>
+            <p>Farms</p>
+          </div>
+        </a>
+        <a href="/filter?category=arctic">
+          <div class="filter">
+            <div><i class="fa-solid fa-snowflake"></i></div>
+            <p>Arctic</p>
+          </div> 
+        </a>
+        <a href="/filter?category=domes">
+          <div class="filter">
+            <div><i class="fa-solid fa-igloo"></i></div>
+            <p>Domes</p>
+          </div>
+        </a>
+        <a href="/filter?category=boats">
+          <div class="filter">
+            <div><i class="fa-solid fa-ship"></i></div>
+            <p>Boats</p>
+          </div>
+        </a>
+      </div>
+      <button id="right-btn" class="arrow">&rarr;</button>
+      <div id="tax-toggle">
+        <div class="form-check-reverse form-switch">
+          <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
+          <label class="form-check-label" for="switchCheckDefault">Total price after taxes</label>
+        </div>
+      </div>
+    </div>
     <div class="main-container">
-      <h4 class="heading mt-2"><i class="bi bi-fire"></i> Trending</h4>
       <span class="counter listing-counter"><%= allListings.length %> listings found</span>
         <% for(let listings of allListings){ %>
             <a class="card-links" href="/listings/<%= listings._id %>">
@@ -10,9 +87,41 @@
                     <div class="card-body">
                       <p class="card-title"><b><%= listings.title %></b></p>
                     </a>
-                      <p class="card-price"><span>&#8377;<%= listings.price.toLocaleString("en-IN") %> </span>/night</p>
+                      <p class="card-price"><span>&#8377;<%= listings.price.toLocaleString("en-IN") %> </span>/night 
+                      <i class="tax-info">&nbsp;&nbsp;+ 18% gst</i>
+                      </p>
                     </div>
                 </div>
         <% } %>
     </div>
 </body>
+
+<script>
+  //making tax switch functional
+  let taxToggle = document.getElementById("switchCheckDefault");
+  let taxInfo = document.querySelectorAll(".tax-info");
+  taxToggle.addEventListener("click", (event)=>{
+    console.log("button is clicked");
+    for(let info of taxInfo){
+      if(info.style.display === "inline"){
+        info.style.display = "none"
+      } else{
+        info.style.display = "inline"
+      }
+    }
+  });
+
+  //making icon slider functional
+  let slider = document.getElementById("icon-slider");
+  let leftBtn = document.getElementById("left-btn");
+  let rightBtn = document.getElementById("right-btn");
+
+  leftBtn.addEventListener("click", (event) => {
+    console.log("clicked");
+    slider.scrollBy({left: -150, behavior: "smooth"})
+  });
+  rightBtn.addEventListener("click", (event) => {
+    console.log("clicked");
+    slider.scrollBy({left: 100, behavior: "smooth"})
+  });
+</script>

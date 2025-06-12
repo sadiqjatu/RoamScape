@@ -71,3 +71,17 @@ module.exports.validateReview = (req, res, next) => {
         next();
     }
 }
+
+//middleware to check size of an image
+module.exports.multerErrorHandler = (uploadMiddleware) => {
+    return (req, res, next) => {
+        uploadMiddleware(req, res, (err) => {
+            if(err && err.code === "LIMIT_FILE_SIZE"){
+                req.flash("error", "File too large. Must be under 5MB.");
+                return res.redirect("/listings/new");
+            }
+            if(err) return next(err);
+            next();     //no error, continue
+        })
+    }
+}

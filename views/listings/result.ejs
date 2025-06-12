@@ -1,5 +1,4 @@
 <% layout("./layouts/boilerplate") %>
-
 <body>
     <h2 class="results-heading">Results for "<%= searchQuery %>"</h2>
 
@@ -8,12 +7,14 @@
 <% } else { %>
   <div class="listing-container">
     <% listings.forEach(listing => { %>
-      <div class="listing-card">
-        <h3><%= listing.title %></h3>
-        <p><strong>Location:</strong> <%= listing.location %></p>
-        <p><strong>Price:</strong> ₹<%= listing.price %></p>
-        <img src="<%= listing.imageUrl %>" alt="Listing image" />
-      </div>
+      <a href="/listings/<%= listing._id %>">
+        <div class="listing-card">
+          <h3><%= listing.title %></h3>
+          <p><strong>Location:</strong> <%= listing.location %></p>
+          <p><strong>Price:</strong> ₹<%= listing.price %></p>
+          <img src="<%= listing.image.url %>" alt="Listing image" />
+        </div>
+      </a>
     <% }) %>
   </div>
 <% } %>

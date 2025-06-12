@@ -1,7 +1,7 @@
 <% layout("./layouts/boilerplate") %>
 <body>
     <div class="new-content">
-    <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" novalidate class="new-form needs-validation">
+    <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" novalidate class="new-form needs-validation" enctype="multipart/form-data">
         <h3>Edit your listing</h3>
         <div class="mb-3">
             <label for="listingTitle" class="form-label">Title</label>
@@ -15,9 +15,30 @@
             <div class="invalid-feedback">Description should be valid</div>
         </div>
         <div class="mb-3">
-            <label for="listingImage" class="form-label">Image link</label>
-            <input name="listing[image][url]" value="<%= listing.image.url %>" type="url" id="listingImage" class="form-control" required>
-            <div class="invalid-feedback">Link should be valid</div>
+            <label for="listingCategory" class="form-label">Category</label>
+            <select class="form-select" name="listing[category]" id="listingCategory" required>
+                <option selected>--Select the category--</option>
+                <option value="Trending">Trending</option>
+                <option value="Rooms">Rooms</option>
+                <option value="Iconic cities">Iconic cities</option>
+                <option value="Mountains">Mountains</option>
+                <option value="Castles">Castles</option>
+                <option value="Amazing Pools">Amazing pools</option>
+                <option value="Camping">Camping</option>
+                <option value="Farms">Farms</option>
+                <option value="Arctic">Arctic</option>
+                <option value="Domes">Domes</option>
+                <option value="Boats">Boats</option>
+            </select>
+            <div class="invalid-feedback">Required</div>
+        </div>
+        <div class="mb-3">
+            Original Listing Image <br>
+            <img style="height: 200px; width: 200px;" src="<%= originalImageUrl %>" alt="preview listing image">
+        </div>
+        <div class="mb-3">
+            <label for="listingImage" class="form-label">Upload New Image</label>
+            <input name="listing[image]" type="file" id="listingImage" class="form-control">
         </div>
         <div class="mb-3 price-country">
             <div class="price">
@@ -36,7 +57,7 @@
             <input name="listing[location]" value="<%= listing.location %>" type="text" id="listingLocation" class="form-control" required>
             <div class="invalid-feedback">Location should be valid</div>
         </div>
-        <button>Edit</button>
+        <button class="mb-3">Edit</button>
     </form>
     </div>
 </body>

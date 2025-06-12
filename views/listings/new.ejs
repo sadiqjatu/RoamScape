@@ -15,8 +15,27 @@
             <div class="invalid-feedback">Description should be valid</div>
         </div>
         <div class="mb-3">
+            <label for="listingCategory" class="form-label">Category</label>
+            <select class="form-select" name="listing[category]" id="listingCategory" required>
+                <option selected>--Select the category--</option>
+                <option value="Trending">Trending</option>
+                <option value="Rooms">Rooms</option>
+                <option value="Iconic cities">Iconic cities</option>
+                <option value="Mountains">Mountains</option>
+                <option value="Castles">Castles</option>
+                <option value="Amazing Pools">Amazing pools</option>
+                <option value="Camping">Camping</option>
+                <option value="Farms">Farms</option>
+                <option value="Arctic">Arctic</option>
+                <option value="Domes">Domes</option>
+                <option value="Boats">Boats</option>
+            </select>
+            <div class="invalid-feedback">Required</div>
+        </div>
+        <div class="mb-3">
             <label for="listingUrl" class="form-label">Upload Listing Image</label>
-            <input name="listing[image][url]" type="file" id="listingUrl" class="form-control">
+            <input name="listing[image]" type="file" id="listingUrl" class="form-control" required>
+            <div class="invalid-feedback">Required</div>
         </div>
         <div class="mb-3 price-country">
             <div class="price">

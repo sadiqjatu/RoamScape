@@ -1,4 +1,7 @@
 //Requiring packages or modules
+if(process.env.NODE_DEV != "production"){
+    require("dotenv").config();
+}
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
@@ -8,6 +11,7 @@ const ejsmate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError.js");
 const cors = require("cors");
 const session = require("express-session");
+const MongoStore = require('connect-mongo');
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
@@ -29,6 +33,8 @@ app.use(methodOverride("_method"));
 app.engine("ejs", ejsmate);
 app.use(express.static(path.join(__dirname, "/assets")));
 
+let dbUrl = process.env.ATLASDB_URL;
+
 main().then( ()=>{
     console.log("Connected to DB");
 }).catch( (err) => {
@@ -37,11 +43,24 @@ main().then( ()=>{
 
 //Connecting node.js to the mongoDB database
 async function main(){
-    await mongoose.connect("mongodb://127.0.0.1:27017/roamscape")
+    await mongoose.connect(dbUrl);
 }
 
+const store = MongoStore.create({
+    mongoUrl: dbUrl,
+    crypto: {
+        secret: process.env.SECRET
+    },
+    touchAfter: 24 * 3600   //for lazy update
+});
+
+store.on("error", (err) => {
+    console.log("ERROR IN MONGO SESSION STORE", err);
+})
+
 const sessionOptions = {
-    secret: "mysupersecretcode",
+    store,
+    secret: process.env.SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -88,6 +107,20 @@ app.get('/search', async (req, res) => {
       res.status(500).send("Server error");
     }
   });
+
+app.get("/filter", async (req, res) => {
+    try{
+        const category = req.query.category;
+        console.log(category);
+        const listings = await Listing.find({
+            category: { $regex: category, $options: "i"}
+        });
+        res.render("listings/index.ejs", { allListings: listings});
+    } catch(err) {
+        console.log(err);
+        res.status(500).send("Server error");
+    }
+});
 
 app.get("/bookings/user/", (req, res) => {
     req.flash("error", "You must be logged in!");
