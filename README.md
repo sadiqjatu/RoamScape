@@ -7,7 +7,7 @@ RoamScape is a full-featured web application inspired by Airbnb, built using the
 ## 🚀 Live Demo
 
 🌐 [Visit RoamScape Live](https://roamscape.onrender.com)  
-🧑‍💻 GitHub Repo: [github.com/sadiqj/roamscape](https://github.com/sadiqj/roamscape)
+🧑‍💻 GitHub Repo: [github.com/sadiqj/roamscape](https://github.com/sadiqjatu/roamscape)
 
 ---
 
