@@ -55,5 +55,5 @@ This project is licensed under the MIT License.
 
 Developed by Sadiq Jatu
 📧 sadiqjatu@email.com
-[LinkedIn](linkedin.com/in/sadiq-jatu-805360314 
+[LinkedIn](https://linkedin.com/in/sadiq-jatu-805360314 
 )
